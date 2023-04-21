@@ -52,8 +52,8 @@ public class UpdateDialogFragment extends DialogFragment implements View.OnClick
     public static final String TIPS = "请授权访问存储空间权限，否则App无法更新";
     public static boolean isShow = false;
     private TextView mContentTextView;
-    private TextView mUpdateOkButton;
-    private Button mMarketOkButton;
+    //    private TextView mUpdateOkButton;
+    private Button mOkButton;
     private UpdateAppBean mUpdateApp;
     private NumberProgressBar mNumberProgressBar;
     private ImageView mIvClose;
@@ -162,9 +162,7 @@ public class UpdateDialogFragment extends DialogFragment implements View.OnClick
         //标题
         mTitleTextView = view.findViewById(R.id.tv_title);
         //更新按钮
-        mUpdateOkButton = view.findViewById(R.id.btn_ok);
-        //应用市场下载
-        mMarketOkButton = view.findViewById(R.id.btn_market);
+        mOkButton = view.findViewById(R.id.btn_ok);
         //进度条
         mNumberProgressBar = view.findViewById(R.id.npb);
         //关闭按钮
@@ -196,10 +194,9 @@ public class UpdateDialogFragment extends DialogFragment implements View.OnClick
             final String updateLog = mUpdateApp.getUpdateLog();
             final boolean market = mUpdateApp.isMarket();
             if (market) {
-                mUpdateOkButton.setVisibility(View.VISIBLE);
+                mOkButton.setText("前往应用市场升级");
             } else {
-                mUpdateOkButton.setVisibility(View.GONE);
-                mMarketOkButton.setText("立即升级");
+                mOkButton.setText("立即升级");
             }
             String msg = "";
 
@@ -278,14 +275,13 @@ public class UpdateDialogFragment extends DialogFragment implements View.OnClick
         mTopIv.setImageResource(topResId);
         mNumberProgressBar.setProgressTextColor(color);
         mNumberProgressBar.setReachedBarColor(color);
-        mMarketOkButton.setBackgroundColor(color);
+        mOkButton.setBackgroundColor(color);
         //随背景颜色变化
-        mMarketOkButton.setTextColor(ColorUtil.isTextColorDark(color) ? Color.BLACK : Color.WHITE);
+        mOkButton.setTextColor(ColorUtil.isTextColorDark(color) ? Color.BLACK : Color.WHITE);
     }
 
     private void initEvents() {
-        mUpdateOkButton.setOnClickListener(this);
-        mMarketOkButton.setOnClickListener(this);
+        mOkButton.setOnClickListener(this);
         mIvClose.setOnClickListener(this);
         mIgnore.setOnClickListener(this);
     }
@@ -294,7 +290,18 @@ public class UpdateDialogFragment extends DialogFragment implements View.OnClick
     public void onClick(View view) {
         int i = view.getId();
         if (i == R.id.btn_ok) {
-            starUpdate();
+            if (mUpdateApp != null && mUpdateApp.isMarket()) {
+                try {
+                    startActivity(new Intent("android.intent.action.VIEW", Uri
+                            .parse("market://details?id=" + getContext().getPackageName())));
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    Toast.makeText(getContext(), "未找到应用市场,开始直接下载", Toast.LENGTH_SHORT).show();
+                    starUpdate();
+                }
+            } else {
+                starUpdate();
+            }
         } else if (i == R.id.iv_close) {
             // TODO @WVector 这里是否要对UpdateAppBean的强制更新做处理？不会重合，当强制更新时，就不会显示这个按钮，也不会调这个方法。
 //            if (mNumberProgressBar.getVisibility() == View.VISIBLE) {
@@ -309,21 +316,6 @@ public class UpdateDialogFragment extends DialogFragment implements View.OnClick
         } else if (i == R.id.tv_ignore) {
             AppUpdateUtils.saveIgnoreVersion(getActivity(), mUpdateApp.getNewVersion());
             dismiss();
-        } else if (i == R.id.btn_market) {
-            if (mUpdateApp != null) {
-                if (mUpdateApp.isMarket()) {
-                    try {
-                        startActivity(new Intent("android.intent.action.VIEW", Uri
-                                .parse("market://details?id=" + getContext().getPackageName())));
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                        Toast.makeText(getContext(), "未找到应用市场,开始直接下载", Toast.LENGTH_SHORT).show();
-                        starUpdate();
-                    }
-                } else {
-                    starUpdate();
-                }
-            }
         }
     }
 
@@ -412,8 +404,7 @@ public class UpdateDialogFragment extends DialogFragment implements View.OnClick
                 public void onStart() {
                     if (!UpdateDialogFragment.this.isRemoving()) {
                         mNumberProgressBar.setVisibility(View.VISIBLE);
-                        mUpdateOkButton.setVisibility(View.GONE);
-                        mMarketOkButton.setVisibility(View.GONE);
+                        mOkButton.setVisibility(View.GONE);
                     }
                 }
 
@@ -474,9 +465,8 @@ public class UpdateDialogFragment extends DialogFragment implements View.OnClick
 
     private void showInstallBtn(final File file) {
         mNumberProgressBar.setVisibility(View.GONE);
-        mMarketOkButton.setText("安装");
-        mMarketOkButton.setVisibility(View.VISIBLE);
-        mMarketOkButton.setOnClickListener(new View.OnClickListener() {
+        mOkButton.setText("安装");
+        mOkButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 AppUpdateUtils.installApp(UpdateDialogFragment.this, file);

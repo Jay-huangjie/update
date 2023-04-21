@@ -52,22 +52,12 @@
             </ScrollView>
 
             <Button
-                android:id="@+id/btn_market"
+                android:id="@+id/btn_ok"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:maxHeight="35dp"
                 android:text="前往应用市场下载"
-                android:textColor="@android:color/holo_red_dark"
-                android:textSize="14sp" />
-
-            <TextView
-                android:id="@+id/btn_ok"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:layout_marginTop="10dp"
-                android:text="应用内升级"
                 android:textColor="@android:color/holo_red_dark"
                 android:textSize="14sp" />
 
