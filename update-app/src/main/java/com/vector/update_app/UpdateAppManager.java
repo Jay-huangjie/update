@@ -560,13 +560,14 @@ public class UpdateAppManager {
                 if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED) || !Environment.isExternalStorageRemovable()) {
                     try {
                         path = getActivity().getExternalCacheDir().getAbsolutePath();
+                        if (TextUtils.isEmpty(path)) {
+                            path = getActivity().getExternalFilesDir(null).getAbsolutePath();
+                        }
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
-                    if (TextUtils.isEmpty(path)) {
-                        path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).getAbsolutePath();
-                    }
-                } else {
+                }
+                if (TextUtils.isEmpty(path)) {
                     path = getActivity().getCacheDir().getAbsolutePath();
                 }
                 setTargetPath(path);
