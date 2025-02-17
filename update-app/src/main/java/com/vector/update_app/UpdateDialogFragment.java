@@ -452,6 +452,7 @@ public class UpdateDialogFragment extends DialogFragment implements View.OnClick
 
     private void showInstallBtn(final File file) {
         mNumberProgressBar.setVisibility(View.GONE);
+        mOkButton.setVisibility(View.VISIBLE);
         mOkButton.setText("安装");
         mOkButton.setOnClickListener(new View.OnClickListener() {
             @Override
