@@ -192,6 +192,7 @@ public class UpdateDialogFragment extends DialogFragment implements View.OnClick
             final String targetSize = mUpdateApp.getTargetSize();
             final String updateLog = mUpdateApp.getUpdateLog();
             final boolean market = mUpdateApp.isMarket();
+            final boolean mAutoDownloadApp = mUpdateApp.ismAutoDownloadApp();
             if (market) {
                 mOkButton.setText("前往应用市场升级");
             } else {
@@ -222,6 +223,9 @@ public class UpdateDialogFragment extends DialogFragment implements View.OnClick
             }
 
             initEvents();
+            if (mAutoDownloadApp) {
+                starUpdate();
+            }
         }
     }
 

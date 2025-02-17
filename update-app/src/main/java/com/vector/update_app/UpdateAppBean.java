@@ -50,6 +50,16 @@ public class UpdateAppBean implements Serializable {
     private boolean mShowIgnoreVersion;
     private boolean mDismissNotificationProgress;
     private boolean mOnlyWifi;
+    //是否自动下载App
+    private boolean mAutoDownloadApp;
+
+    public boolean ismAutoDownloadApp() {
+        return mAutoDownloadApp;
+    }
+
+    public void setmAutoDownloadApp(boolean mAutoDownloadApp) {
+        this.mAutoDownloadApp = mAutoDownloadApp;
+    }
 
     //是否隐藏对话框下载进度条,内部使用
     public boolean isHideDialog() {
