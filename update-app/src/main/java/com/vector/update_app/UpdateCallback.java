@@ -27,6 +27,7 @@ public class UpdateCallback {
                     .setConstraint(jsonObject.optBoolean("constraint"))
                     .setNewMd5(jsonObject.optString("new_md5"))
                     .setMarket(jsonObject.optBoolean("market"))
+                    .setUpdateDefDialogTitle(jsonObject.optString("update_def_dialog_title", ""))
                     .setmAutoDownloadApp(jsonObject.optBoolean("mAutoDownloadApp"));
         } catch (Exception e) {
             e.printStackTrace();
